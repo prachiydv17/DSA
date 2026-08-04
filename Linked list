@@ -1,0 +1,96 @@
+#include <iostream>
+using namespace std;
+
+struct Node
+{
+    int data;
+    Node *next;
+};
+
+class LinkedList
+{
+private:
+    Node *head;
+
+public:
+    LinkedList()
+    {
+        head = NULL;
+    }
+
+    void createList()
+    {
+        int n, value;
+
+        cout << "\nEnter number of nodes : ";
+        cin >> n;
+
+        if (n <= 0)
+        {
+            cout << "Invalid number of nodes.";
+            return;
+        }
+
+        for (int i = 1; i <= n; i++)
+        {
+            cout << "Enter value " << i << " : ";
+            cin >> value;
+
+            insertEnd(value);
+        }
+
+        cout << "\nLinked List Created Successfully.\n";
+    }
+
+    void insertEnd(int value)
+    {
+        Node *newNode = new Node;
+
+        newNode->data = value;
+        newNode->next = NULL;
+
+        if (head == NULL)
+        {
+            head = newNode;
+            return;
+        }
+
+        Node *temp = head;
+
+        while (temp->next != NULL)
+        {
+            temp = temp->next;
+        }
+
+        temp->next = newNode;
+    }
+
+    void deleteNode(int value)
+    {
+        if (head == NULL)
+        {
+            cout << "\nList is Empty.\n";
+            return;
+        }
+
+        Node *temp = head;
+        Node *previous = NULL;
+
+        if (head->data == value)
+        {
+            head = head->next;
+            delete temp;
+
+            cout << "\nNode Deleted.\n";
+            return;
+        }
+
+        while (temp != NULL && temp->data != value)
+        {
+            previous = temp;
+            temp = temp->next;
+        }
+
+        if (temp == NULL)
+        {
+            cout << "\nValue Not Found.\n
