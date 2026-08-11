@@ -1,0 +1,127 @@
+#include <iostream>
+using namespace std;
+
+struct Node
+{
+    int data;
+    Node *left;
+    Node *right;
+};
+
+Node *root = NULL;
+
+class Tree
+{
+public:
+
+    
+    Node* createTree()
+    {
+        int value;
+
+        cout << "Enter value (-1 for NULL): ";
+        cin >> value;
+
+        if (value == -1)
+            return NULL;
+
+        Node *temp = new Node;
+        temp->data = value;
+
+        cout << "Enter left child of " << value << endl;
+        temp->left = createTree();
+
+        cout << "Enter right child of " << value << endl;
+        temp->right = createTree();
+
+        return temp;
+    }
+
+    
+    void inorder(Node *temp)
+    {
+        if (temp == NULL)
+            return;
+
+        inorder(temp->left);
+        cout << temp->data << " ";
+        inorder(temp->right);
+    }
+
+   
+    void preorder(Node *temp)
+    {
+        if (temp == NULL)
+            return;
+
+        cout << temp->data << " ";
+        preorder(temp->left);
+        preorder(temp->right);
+    }
+
+    
+    void postorder(Node *temp)
+    {
+        if (temp == NULL)
+            return;
+
+        postorder(temp->left);
+        postorder(temp->right);
+        cout << temp->data << " ";
+    }
+};
+
+int main()
+{
+    Tree t;
+    int choice;
+
+    do
+    {
+        cout << "\n===== Binary Tree Menu =====";
+        cout << "\n1. Create Binary Tree";
+        cout << "\n2. Inorder Traversal";
+        cout << "\n3. Preorder Traversal";
+        cout << "\n4. Postorder Traversal";
+        cout << "\n5. Exit";
+
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            root = t.createTree();
+            cout << "Binary Tree Created Successfully!\n";
+            break;
+
+        case 2:
+            cout << "Inorder Traversal: ";
+            t.inorder(root);
+            cout << endl;
+            break;
+
+        case 3:
+            cout << "Preorder Traversal: ";
+            t.preorder(root);
+            cout << endl;
+            break;
+
+        case 4:
+            cout << "Postorder Traversal: ";
+            t.postorder(root);
+            cout << endl;
+            break;
+
+        case 5:
+            cout << "Program Exited.";
+            break;
+
+        default:
+            cout << "Invalid Choice!";
+        }
+
+    } while (choice != 5);
+
+    return 0;
+}
