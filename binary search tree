@@ -1,0 +1,169 @@
+#include <iostream>
+using namespace std;
+
+struct node
+{
+    int key;
+    node *left;
+    node *right;
+};
+
+node *newNode(int item)
+{
+    node *temp = new node;
+
+    temp->key = item;
+    temp->left = NULL;
+    temp->right = NULL;
+
+    return temp;
+}
+
+void inorder(node *root)
+{
+    if (root != NULL)
+    {
+        inorder(root->left);
+        cout << root->key << " -> ";
+        inorder(root->right);
+    }
+}
+
+void preorder(node *root)
+{
+    if (root != NULL)
+    {
+        cout << root->key << " -> ";
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+void postorder(node *root)
+{
+    if (root != NULL)
+    {
+        postorder(root->left);
+        postorder(root->right);
+        cout << root->key << " -> ";
+    }
+}
+
+node *insert(node *root, int key)
+{
+    if (root == NULL)
+        return newNode(key);
+
+    if (key < root->key)
+        root->left = insert(root->left, key);
+    else
+        root->right = insert(root->right, key);
+
+    return root;
+}
+
+node *minValueNode(node *root)
+{
+    node *current = root;
+
+    while (current != NULL && current->left != NULL)
+        current = current->left;
+
+    return current;
+}
+
+node *deleteNode(node *root, int key)
+{
+    if (root == NULL)
+        return root;
+
+    if (key < root->key)
+    {
+        root->left = deleteNode(root->left, key);
+    }
+    else if (key > root->key)
+    {
+        root->right = deleteNode(root->right, key);
+    }
+    else
+    {
+        if (root->left == NULL)
+        {
+            node *temp = root->right;
+            delete root;
+            return temp;
+        }
+        else if (root->right == NULL)
+        {
+            node *temp = root->left;
+            delete root;
+            return temp;
+        }
+
+        node *temp = minValueNode(root->right);
+        root->key = temp->key;
+        root->right = deleteNode(root->right, temp->key);
+    }
+
+    return root;
+}
+
+int main()
+{
+    node *root = NULL;
+    int choice, value;
+
+    do
+    {
+        cout << "\n===== Binary Search Tree Menu =====";
+        cout << "\n1. Insert Node";
+        cout << "\n2. Delete Node";
+        cout << "\n3. Inorder Traversal";
+        cout << "\n4. Preorder Traversal";
+        cout << "\n5. Postorder Traversal";
+        cout << "\n6. Exit";
+
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            cout << "Enter value: ";
+            cin >> value;
+            root = insert(root, value);
+            break;
+
+        case 2:
+            cout << "Enter value to delete: ";
+            cin >> value;
+            root = deleteNode(root, value);
+            break;
+
+        case 3:
+            cout << "Inorder Traversal: ";
+            inorder(root);
+            break;
+
+        case 4:
+            cout << "Preorder Traversal: ";
+            preorder(root);
+            break;
+
+        case 5:
+            cout << "Postorder Traversal: ";
+            postorder(root);
+            break;
+
+        case 6:
+            cout << "Program Exited.";
+            break;
+
+        default:
+            cout << "Invalid Choice!";
+        }
+
+    } while (choice != 6);
+
+    return 0;
+}
