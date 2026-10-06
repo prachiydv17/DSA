@@ -1,0 +1,90 @@
+#include <iostream>
+using namespace std;
+
+#define SIZE 20
+
+class Graph {
+    int n, edges;
+    int adj[SIZE][SIZE];
+
+    struct Edge {
+        int u, v, w;
+    };
+
+    Edge e[SIZE * SIZE];
+    int parent[SIZE];
+
+public:
+    void createGraph() {
+        cout << "Enter number of vertices: ";
+        cin >> n;
+
+        cout << "Enter number of edges: ";
+        cin >> edges;
+
+        for (int i = 0; i < edges; i++) {
+            cout << "Enter source, destination and weight: ";
+            cin >> e[i].u >> e[i].v >> e[i].w;
+        }
+    }
+
+    int find(int x) {
+        while (parent[x] != x)
+            x = parent[x];
+
+        return x;
+    }
+
+    void unionSet(int a, int b) {
+        a = find(a);
+        b = find(b);
+        parent[a] = b;
+    }
+
+    void kruskal() {
+        Edge temp;
+
+        for (int i = 0; i < n; i++)
+            parent[i] = i;
+
+        // Sort edges by weight
+        for (int i = 0; i < edges - 1; i++) {
+            for (int j = i + 1; j < edges; j++) {
+                if (e[i].w > e[j].w) {
+                    temp = e[i];
+                    e[i] = e[j];
+                    e[j] = temp;
+                }
+            }
+        }
+
+        cout << "\nMinimum Spanning Tree:\n";
+
+        int count = 0;
+        int total = 0;
+
+        for (int i = 0; i < edges && count < n - 1; i++) {
+            if (find(e[i].u) != find(e[i].v)) {
+                cout << e[i].u << " -- "
+                     << e[i].v << " = "
+                     << e[i].w << endl;
+
+                total += e[i].w;
+                count++;
+
+                unionSet(e[i].u, e[i].v);
+            }
+        }
+
+        cout << "Minimum Cost = " << total << endl;
+    }
+};
+
+int main() {
+    Graph g;
+
+    g.createGraph();
+    g.kruskal();
+
+    return 0;
+}
